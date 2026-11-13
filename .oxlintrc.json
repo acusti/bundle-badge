@@ -1,0 +1,12 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "categories": {
+        "correctness": "error"
+    },
+    "plugins": ["typescript", "vitest"],
+    "rules": {
+        "no-empty-function": "error",
+        "no-shadow": "error",
+        "prefer-const": ["error", { "destructuring": "all" }]
+    }
+}

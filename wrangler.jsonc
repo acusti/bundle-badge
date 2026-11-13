@@ -1,0 +1,11 @@
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "bundle-badge",
+    "main": "src/index.ts",
+    "compatibility_date": "2026-08-10",
+    "compatibility_flags": ["nodejs_compat"],
+    // Sizes are immutable per published version, so they are cached for good
+    "kv_namespaces": [{ "binding": "SIZES" }],
+    "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+    "observability": { "enabled": true },
+}
