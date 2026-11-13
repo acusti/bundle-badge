@@ -7,5 +7,6 @@
     // Sizes are immutable per published version, so they are cached for good
     "kv_namespaces": [{ "binding": "SIZES" }],
     "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+    "preview_urls": false,
     "observability": { "enabled": true },
 }

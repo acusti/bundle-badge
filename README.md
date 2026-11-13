@@ -62,13 +62,17 @@ this needs the
 [Workers Paid plan](https://developers.cloudflare.com/workers/platform/pricing/)
 ($5/month).
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/acusti/bundle-badge)
+
+Or, from a clone:
+
 ```bash
 bun install
 bun run deploy
 ```
 
-Deploying creates the `SIZES` KV namespace (the cache) for you. To try it
-locally, run `bun run dev`.
+Either way, deploying creates the `SIZES` KV namespace (the cache) for you.
+To try it locally, run `bun run dev`.
 
 ## Development
 
