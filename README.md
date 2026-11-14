@@ -12,18 +12,18 @@ together in a README.
 
 ## Routes
 
-| Route                           | Shows                                   |
-| ------------------------------- | --------------------------------------- |
-| `/minzip/<package>[/<version>]` | minified and gzipped size, dependencies |
-| `/min/<package>[/<version>]`    | minified size, dependencies included    |
+| Route                            | Shows                                                                     |
+| -------------------------------- | ------------------------------------------------------------------------- |
+| `/minzip/<package>[/<version>]`  | minified and gzipped size, dependencies                                   |
+| `/min/<package>[/<version>]`     | minified size, dependencies included                                      |
 | `/package/<package>[/<version>]` | an HTML page: both sizes, a link to npm, and the package’s other versions |
 
 `<package>` can be scoped (`@scope/name`). `<version>` can be an exact
 version, a range, or a dist-tag, and defaults to `latest`. When a size
 can’t be worked out, the badge says `unable to compute size`.
 
-The page measures only the version it shows. Other versions are links,
-so browsing past releases costs nothing until one is opened.
+The page measures only the version it shows. Other versions are links, so
+browsing past releases costs nothing until one is opened.
 
 ## How a size is worked out
 

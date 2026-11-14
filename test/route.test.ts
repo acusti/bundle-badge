@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseRoute } from '../src/route.ts';
+import { parsePageRoute, parseRoute } from '../src/route.ts';
 
 describe('parseRoute', () => {
     it('reads unscoped and scoped names, with and without a version', () => {
@@ -41,7 +41,10 @@ describe('parseRoute', () => {
 
 describe('parsePageRoute', () => {
     it('reads scoped names and versions', () => {
-        expect(parsePageRoute('/package/@a/b/1.0.0')).toEqual({ name: '@a/b', spec: '1.0.0' });
+        expect(parsePageRoute('/package/@a/b/1.0.0')).toEqual({
+            name: '@a/b',
+            spec: '1.0.0',
+        });
         expect(parsePageRoute('/package/b')).toEqual({ name: 'b', spec: 'latest' });
     });
 
