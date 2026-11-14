@@ -7,8 +7,11 @@ draws the same badge as [npmx.dev](https://npmx.dev)’s, so the two sit
 together in a README.
 
 ```md
-![minzip](https://<your-worker>/minzip/@acusti/dropdown)
+[![minzip](https://<your-worker>/minzip/@acusti/dropdown)](https://<your-worker>/package/@acusti/dropdown)
 ```
+
+The badge links to the package’s page, which shows both sizes, a link to
+npm and the other versions, rather than to the image itself.
 
 ## Routes
 

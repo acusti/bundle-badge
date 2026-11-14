@@ -69,7 +69,7 @@ export function renderPage({ all, latest, name, result, version, versions }: Pag
 ${sizes}
 <p>Sizes include dependencies. <a href="${npm}">View on npm</a></p>
 <h2>Versions</h2><ul>${items}</ul>${more}
-<footer><p><a href="https://github.com/acusti/bundle-badge#readme">About bundle-badge</a> (how sizes are measured, and how to add these badges to your README)</p></footer>
+<footer><p><a href="https://github.com/acusti/bundle-badge#readme">About bundle-badge</a> (how sizes are measured, and how to add a bundle size badge to your README)</p></footer>
 </body></html>
 `;
 }
