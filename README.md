@@ -6,7 +6,7 @@ as a [Cloudflare Worker](https://developers.cloudflare.com/workers/) and
 draws the same badge as [npmx.dev](https://npmx.dev)’s, so the two sit
 together in a README.
 
-[![minzip](https://bundle-badge.andrew-ab6.workers.dev/minzip/@acusti/dropdown)](https://bundle-badge.andrew-ab6.workers.dev/package/@acusti/dropdown)
+[![minzip](https://bundlebadge.acusti.ca/minzip/@acusti/dropdown)](https://bundlebadge.acusti.ca/package/@acusti/dropdown)
 
 ```md
 [![minzip](https://<your-worker>/minzip/@acusti/dropdown)](https://<your-worker>/package/@acusti/dropdown)
