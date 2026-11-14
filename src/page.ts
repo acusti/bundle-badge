@@ -27,7 +27,7 @@ type PageData = {
 };
 
 const STYLE = `
-:root{color-scheme:light dark;font-family:Geist,system-ui,-apple-system,sans-serif}
+:root{color-scheme:light dark;font-family:system-ui,sans-serif}
 body{max-width:36rem;margin:3rem auto;padding:0 1rem;line-height:1.5}
 h1{font-size:1.5rem;margin:0}h1 span{font-weight:400;opacity:.6}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1.5rem;margin:1.5rem 0}
