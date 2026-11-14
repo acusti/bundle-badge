@@ -33,7 +33,7 @@ h1{font-size:1.5rem;margin:0}h1 span{font-weight:400;opacity:.6}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1.5rem;margin:1.5rem 0}
 dt{opacity:.6}dd{margin:0;font-variant-numeric:tabular-nums}
 ul{padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:.25rem .75rem}
-a{color:#a855f7}[aria-current]{font-weight:700;text-decoration:none;color:inherit}
+a{color:#a855f7}footer{margin-top:3rem;font-size:.875rem;opacity:.7}[aria-current]{font-weight:700;text-decoration:none;color:inherit}
 `;
 
 export function renderPage({ all, latest, name, result, version, versions }: PageData) {
@@ -69,6 +69,7 @@ export function renderPage({ all, latest, name, result, version, versions }: Pag
 ${sizes}
 <p>Sizes include dependencies. <a href="${npm}">View on npm</a></p>
 <h2>Versions</h2><ul>${items}</ul>${more}
+<footer><p><a href="https://github.com/acusti/bundle-badge#readme">About bundle-badge</a>: how sizes are measured, and how to add these badges to your README.</p></footer>
 </body></html>
 `;
 }
