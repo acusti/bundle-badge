@@ -63,11 +63,9 @@ export async function handleRequest(
 
     if (result === 'pending') return unavailable(format, 'calculating…', 30);
     if (!result.ok) {
-        return unavailable(
-            format,
-            'unable to compute size',
-            result.transient ? 30 : 3600,
-        );
+        return result.transient
+            ? unavailable(format, 'try again shortly', 30)
+            : unavailable(format, 'unable to compute size', 3600);
     }
     const lifetime = spec === 'latest' ? 300 : 86_400;
     return badge(

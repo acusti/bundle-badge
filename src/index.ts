@@ -1,5 +1,6 @@
 import minifyWasm from '@oxc-minify/binding-wasm32-wasip1/wasm.wasm';
 import { instantiate } from '@oxc-minify/binding-wasm32-wasip1/workerd';
+import type { MeasurementBudget } from './budget-object.ts';
 import { gzipSize } from './tar.ts';
 import { handleRequest } from './handler.ts';
 import { createSource } from './source.ts';
@@ -7,7 +8,15 @@ import type { Tools } from './bundle.ts';
 import type { Cache } from './size.ts';
 import type { SizeResult } from './types.ts';
 
-type Bindings = { SIZES: KVNamespace };
+type Bindings = {
+    BUDGET: DurableObjectNamespace<MeasurementBudget>;
+    /** Measurements allowed per UTC day across everyone; a number, as text. */
+    DAILY_MEASUREMENTS: string;
+    MEASURE_LIMITER: RateLimit;
+    SIZES: KVNamespace;
+};
+
+export { MeasurementBudget } from './budget-object.ts';
 
 /** Failed lookups are retried after this long; successful ones never expire. */
 const FAILURE_TTL_SECONDS = 3600;
@@ -52,6 +61,14 @@ export default {
         return handleRequest(
             request,
             {
+                // Per caller first, so one hammering client can’t spend the
+                // allowance everyone shares; then the global daily cap
+                admit: async () => {
+                    const key = request.headers.get('cf-connecting-ip') ?? 'unknown';
+                    if (!(await env.MEASURE_LIMITER.limit({ key })).success) return false;
+                    const budget = env.BUDGET.get(env.BUDGET.idFromName('global'));
+                    return budget.take(Number(env.DAILY_MEASUREMENTS));
+                },
                 cache: kvCache(env.SIZES),
                 source: {
                     measure: async (name, version) => {

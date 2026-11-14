@@ -20,7 +20,15 @@ export type Source = {
     resolve(name: string, spec: string): Promise<Failure | string>;
 };
 
-export type Env = { cache: Cache; source: Source };
+export type Env = {
+    /**
+     * Asks leave to download and minify one package, the expensive step. Says
+     * no when the caller or the whole service has done its share for now.
+     */
+    admit(): Promise<boolean>;
+    cache: Cache;
+    source: Source;
+};
 
 /** State shared by every `sizeOf` call that one request makes. */
 export type Run = {
@@ -48,7 +56,13 @@ function measureOnce(
             );
         }
         run.remaining--;
-        measurement = env.source.measure(name, version);
+        measurement = env
+            .admit()
+            .then((admitted) =>
+                admitted
+                    ? env.source.measure(name, version)
+                    : fail('too busy to measure new packages, retry later', true),
+            );
         run.measuring.set(id, measurement);
     }
     return measurement;

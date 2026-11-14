@@ -83,4 +83,32 @@ describe('sizeOf', () => {
         expect(store.has(key('b@1.0.0')) || store.has(key('c@1.0.0'))).toBe(true);
         expect(await sizeFor(env, 'a', '1.0.0')).toMatchObject({ min: 12, ok: true });
     });
+
+    it('fails without caching when admission is refused, and finishes on a later try', async () => {
+        let admissions = 1;
+        const { env, store } = fakeEnv(
+            {
+                'a@1.0.0': { dependencies: { b: '^1.0.0' }, size: 10 },
+                'b@1.0.0': { size: 5 },
+            },
+            async () => admissions-- > 0,
+        );
+        const result = await sizeFor(env, 'a', '1.0.0');
+        expect(result).toMatchObject({ ok: false, transient: true });
+        expect(store.size).toBe(0);
+        // with more allowance, the next attempt finishes the job
+        admissions = 5;
+        expect(await sizeFor(env, 'a', '1.0.0')).toMatchObject({ min: 15, ok: true });
+    });
+
+    it('never asks admission for what is already cached', async () => {
+        let asked = 0;
+        const { env } = fakeEnv({ 'a@1.0.0': { size: 10 } }, async () => {
+            asked++;
+            return true;
+        });
+        await sizeFor(env, 'a', '1.0.0');
+        await sizeFor(env, 'a', '1.0.0');
+        expect(asked).toBe(1);
+    });
 });

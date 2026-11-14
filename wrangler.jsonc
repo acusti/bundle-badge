@@ -5,6 +5,22 @@
     "compatibility_date": "2026-08-10",
     "compatibility_flags": ["nodejs_compat"],
     // Sizes are immutable per published version, so they are cached for good
+    // Measuring a package is the one expensive step, so it is capped: this
+    // many a day for everyone (an exact count, kept in a Durable Object), and
+    // a per-caller rate limit so one client can’t use the day’s allowance up.
+    // 5,000 a day stays well inside the Workers Paid plan’s included CPU time.
+    "vars": { "DAILY_MEASUREMENTS": "5000" },
+    "durable_objects": {
+        "bindings": [{ "name": "BUDGET", "class_name": "MeasurementBudget" }],
+    },
+    "migrations": [{ "tag": "v1", "new_sqlite_classes": ["MeasurementBudget"] }],
+    "ratelimits": [
+        {
+            "name": "MEASURE_LIMITER",
+            "namespace_id": "1001",
+            "simple": { "limit": 30, "period": 60 },
+        },
+    ],
     "kv_namespaces": [{ "binding": "SIZES" }],
     "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
     "preview_urls": false,

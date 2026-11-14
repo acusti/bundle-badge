@@ -55,6 +55,31 @@ the background.
 - One request measures at most 40 uncached packages. A larger tree finishes
   over a few views, since each package it does measure is cached.
 
+## Cost limits
+
+The only expensive step is measuring a package (download, minify, gzip),
+and it only happens the first time a version is requested. Two limits cap
+it:
+
+- **Per caller:** 30 measurements per minute per client IP, per Cloudflare
+  location (the Workers rate limiting binding, which is approximate).
+- **Per day, for everyone:** `DAILY_MEASUREMENTS` (5,000 by default). This
+  count is exact, since it lives in a Durable Object, and it resets at
+  midnight UTC. At roughly 50 ms of CPU each, a full day is about 250 CPU
+  seconds, so a month stays well inside the Workers Paid plan’s included
+  CPU time.
+
+Past either limit, badges for packages that are already cached keep working
+and the rest say `try again shortly`; each package that did get measured
+stays cached, so a big tree finishes over a few tries.
+
+Cached views are not limited, because by then the cost is the request
+itself, and Cloudflare bills every invocation of a Worker, including ones
+that return a 429. To cap that too, set a
+[Workers spending limit](https://developers.cloudflare.com/workers/platform/pricing/#control-usage-costs)
+on the account, or put the Worker on a custom domain and add a WAF rate
+limiting rule, which blocks requests before they reach it.
+
 ## Running your own
 
 Minifying takes more CPU than the Workers Free plan’s 10 ms per request, so
@@ -62,17 +87,14 @@ this needs the
 [Workers Paid plan](https://developers.cloudflare.com/workers/platform/pricing/)
 ($5/month).
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/acusti/bundle-badge)
-
-Or, from a clone:
-
 ```bash
 bun install
 bun run deploy
 ```
 
-Either way, deploying creates the `SIZES` KV namespace (the cache) for you.
-To try it locally, run `bun run dev`.
+Deploying creates the `SIZES` KV namespace (the cache) for you. To try it
+locally, run `bun run dev`. Change `DAILY_MEASUREMENTS` in `wrangler.jsonc`
+to set how many packages may be measured per day.
 
 ## Development
 

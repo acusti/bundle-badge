@@ -17,7 +17,10 @@ export function memoryCache() {
 type Package = { dependencies?: Record<string, string>; size: number };
 
 /** A registry of `name@version` packages; a package’s `min` is `size` and `gzip` half that. */
-export function fakeEnv(packages: Record<string, Package | undefined>) {
+export function fakeEnv(
+    packages: Record<string, Package | undefined>,
+    admit: () => Promise<boolean> = async () => true,
+) {
     const { cache, store } = memoryCache();
     const measured: string[] = [];
     const source: Source = {
@@ -36,6 +39,6 @@ export function fakeEnv(packages: Record<string, Package | undefined>) {
             return spec.replace(/^\^/, '');
         },
     };
-    const env: Env = { cache, source };
+    const env: Env = { admit, cache, source };
     return { env, measured, store };
 }

@@ -39,6 +39,13 @@ describe('handleRequest', () => {
         expect(await response.text()).toContain('unable to compute size');
     });
 
+    it('asks to try again when the service is too busy to measure', async () => {
+        const { env } = fakeEnv({ 'a@1.0.0': { size: 10 } }, async () => false);
+        const response = await get(env, '/minzip/a/1.0.0');
+        expect(await response.text()).toContain('try again shortly');
+        expect(response.headers.get('cache-control')).toBe('public, max-age=30');
+    });
+
     it('explains itself at / and 404s unknown routes', async () => {
         const { env } = fakeEnv({});
         expect((await get(env, '/')).status).toBe(200);
