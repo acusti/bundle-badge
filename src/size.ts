@@ -18,6 +18,8 @@ export type Source = {
     measure(name: string, version: string): Promise<Measurement>;
     /** Turns a dist-tag or semver range into the version it currently means. */
     resolve(name: string, spec: string): Promise<Failure | string>;
+    /** Every published version of a package, newest first. */
+    versions(name: string): Promise<Failure | string[]>;
 };
 
 export type Env = {

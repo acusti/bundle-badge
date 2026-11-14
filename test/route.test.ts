@@ -38,3 +38,14 @@ describe('parseRoute', () => {
         expect(parseRoute('/minzip/%E0%A4%A')).toBeUndefined();
     });
 });
+
+describe('parsePageRoute', () => {
+    it('reads scoped names and versions', () => {
+        expect(parsePageRoute('/package/@a/b/1.0.0')).toEqual({ name: '@a/b', spec: '1.0.0' });
+        expect(parsePageRoute('/package/b')).toEqual({ name: 'b', spec: 'latest' });
+    });
+
+    it('ignores other paths', () => {
+        expect(parsePageRoute('/minzip/b')).toBeUndefined();
+    });
+});

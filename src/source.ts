@@ -1,4 +1,4 @@
-import { maxSatisfying, valid, validRange } from 'semver';
+import { maxSatisfying, rcompare, valid, validRange } from 'semver';
 import { measureFiles } from './bundle.ts';
 import type { Tools } from './bundle.ts';
 import { TooLargeError, gunzip, untar } from './tar.ts';
@@ -78,6 +78,14 @@ export function createSource(tools: Tools): Source {
             const document = await packument(name);
             if ('ok' in document) return document;
             return resolveVersion(document, spec);
+        },
+
+        async versions(name): Promise<Failure | string[]> {
+            const document = await packument(name);
+            if ('ok' in document) return document;
+            return Object.keys(document.versions ?? {})
+                .filter((version) => valid(version))
+                .sort(rcompare);
         },
     };
 }

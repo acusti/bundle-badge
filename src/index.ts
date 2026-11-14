@@ -76,6 +76,7 @@ export default {
                         return source.measure(name, version);
                     },
                     resolve: (name, spec) => source.resolve(name, spec),
+                    versions: (name) => source.versions(name),
                 },
             },
             context,

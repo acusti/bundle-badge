@@ -38,6 +38,12 @@ export function fakeEnv(
         async resolve(name, spec) {
             return spec.replace(/^\^/, '');
         },
+        async versions(name) {
+            return Object.keys(packages)
+                .filter((id) => id.startsWith(`${name}@`))
+                .map((id) => id.slice(name.length + 1))
+                .reverse();
+        },
     };
     const env: Env = { admit, cache, source };
     return { env, measured, store };

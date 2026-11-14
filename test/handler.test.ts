@@ -52,3 +52,16 @@ describe('handleRequest', () => {
         expect((await get(env, '/nope')).status).toBe(404);
     });
 });
+
+describe('package page', () => {
+    it('shows both sizes, the version and a link to npm', async () => {
+        const { env } = fakeEnv({ 'a@1.0.0': { size: 2048 }, 'a@1.1.0': { size: 4096 } });
+        const response = await get(env, '/package/a/1.0.0');
+        expect(response.headers.get('content-type')).toContain('text/html');
+        const html = await response.text();
+        expect(html).toContain('2.00 KB');
+        expect(html).toContain('1.00 KB');
+        expect(html).toContain('https://npmx.dev/package/a/v/1.0.0');
+        expect(html).toContain('href="/package/a/1.1.0"');
+    });
+});
