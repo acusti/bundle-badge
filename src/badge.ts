@@ -61,7 +61,7 @@ export function renderBadge(
     <rect width="${labelWidth}" height="${HEIGHT}" fill="${LABEL_COLOR}"/>
     <rect x="${labelWidth}" width="${valueWidth}" height="${HEIGHT}" fill="${valueColor}"/>
   </g>
-  <g text-anchor="middle" font-family="Geist, system-ui, -apple-system, sans-serif" font-size="${FONT_SIZE}">
+  <g style="pointer-events:none;user-select:none;-webkit-user-select:none" text-anchor="middle" font-family="Geist, system-ui, -apple-system, sans-serif" font-size="${FONT_SIZE}">
     <text x="${labelWidth / 2}" y="14" fill="#ffffff">${escapeXml(label)}</text>
     <text x="${labelWidth + valueWidth / 2}" y="14" fill="${textColorOn(valueColor)}">${escapeXml(value)}</text>
   </g>

@@ -40,3 +40,11 @@ describe('renderBadge', () => {
         expect(renderBadge('a<b', '"&"')).not.toMatch(/a<b|"&"/);
     });
 });
+
+describe('renderBadge text', () => {
+    it('can’t be selected or hit, so a link around the badge works everywhere', () => {
+        const svg = renderBadge('minzip', '1 KB');
+        expect(svg).toContain('pointer-events:none');
+        expect(svg).toContain('user-select:none');
+    });
+});
