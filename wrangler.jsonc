@@ -23,6 +23,12 @@
     ],
     "kv_namespaces": [{ "binding": "SIZES" }],
     "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+    // The custom domain is the public address; the workers.dev one stays off
+    // so abuse can’t bypass rules set on the domain
+    "workers_dev": false,
     "preview_urls": false,
+    // Measuring a cold start costs 100-200ms of CPU; this only stops a
+    // request that has gone wrong
+    "limits": { "cpu_ms": 500 },
     "observability": { "enabled": true },
 }
