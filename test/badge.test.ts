@@ -23,7 +23,7 @@ describe('renderBadge', () => {
         const svg = renderBadge('minzip', '12.13 KB');
         expect(svg).toContain('aria-label="minzip: 12.13 KB"');
         expect(svg).toContain('fill="#0a0a0a"');
-        expect(svg).toContain('fill="#a855f7"');
+        expect(svg).toContain('fill="#b16eff"');
         expect(svg).toContain('height="20"');
         expect(svg).toContain('rx="3"');
     });
@@ -46,5 +46,17 @@ describe('renderBadge text', () => {
         const svg = renderBadge('minzip', '1 KB');
         expect(svg).toContain('pointer-events:none');
         expect(svg).toContain('user-select:none');
+    });
+});
+
+describe('renderBadge value color', () => {
+    it('adds the wide-gamut purple over an sRGB fallback', () => {
+        const svg = renderBadge('minzip', '1 KB');
+        expect(svg).toContain(`fill="${COLORS.purple}" style="fill:oklch(68% 55% 301)"`);
+        expect(svg).toContain('fill="#000000"');
+    });
+
+    it('leaves other colors alone', () => {
+        expect(renderBadge('minzip', 'nope', COLORS.slate)).not.toContain('oklch');
     });
 });

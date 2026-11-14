@@ -1,8 +1,13 @@
 // Mirrors the look of npmx.dev’s `size` badge: two flat halves, a near-black
-// label and a purple value, drawn by hand because Workers have no canvas.
+// label and a purple value, drawn by hand because Workers have no canvas. The
+// purple is lighter than npmx’s so black text on it stays legible.
 
 const LABEL_COLOR = '#0a0a0a';
-export const COLORS = { purple: '#a855f7', slate: '#64748b' } as const;
+export const COLORS = { purple: '#b16eff', slate: '#64748b' } as const;
+
+// Wide-gamut versions of colors, for displays that can show them. The hex
+// above is the sRGB fallback for renderers that don’t read `oklch()`.
+const WIDE_GAMUT: Record<string, string> = { [COLORS.purple]: 'oklch(68% 55% 301)' };
 
 const HEIGHT = 20;
 const FONT_SIZE = 11;
@@ -51,6 +56,8 @@ export function renderBadge(
     const labelWidth = Math.max(MIN_TEXT_WIDTH, textWidth(label)) + PADDING;
     const valueWidth = Math.max(MIN_TEXT_WIDTH, textWidth(value)) + PADDING;
     const width = labelWidth + valueWidth;
+    const wide = WIDE_GAMUT[valueColor];
+    const valueStyle = wide ? ` style="fill:${wide}"` : '';
     const title = escapeXml(`${label}: ${value}`);
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${HEIGHT}" role="img" aria-label="${title}">
   <title>${title}</title>
@@ -59,7 +66,7 @@ export function renderBadge(
   </clipPath>
   <g clip-path="url(#r)">
     <rect width="${labelWidth}" height="${HEIGHT}" fill="${LABEL_COLOR}"/>
-    <rect x="${labelWidth}" width="${valueWidth}" height="${HEIGHT}" fill="${valueColor}"/>
+    <rect x="${labelWidth}" width="${valueWidth}" height="${HEIGHT}" fill="${valueColor}"${valueStyle}/>
   </g>
   <g style="pointer-events:none;user-select:none;-webkit-user-select:none" text-anchor="middle" font-family="Geist, system-ui, -apple-system, sans-serif" font-size="${FONT_SIZE}">
     <text x="${labelWidth / 2}" y="14" fill="#ffffff">${escapeXml(label)}</text>
